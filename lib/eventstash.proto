@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package hfx.v1;
+
+message StoreEventRequest {
+  enum EventFormat {
+    PROTOBUF = 0;
+    JSON = 1;
+  }
+  EventFormat format = 1;
+  bytes data = 2;
+  string kind = 3;
+  string id = 4;
+}
+
+message StoreEventResponse {
+  bool success = 1;
+}
+
+service EventStash {
+  rpc StoreEvent (stream StoreEventRequest) returns (StoreEventResponse);
+}

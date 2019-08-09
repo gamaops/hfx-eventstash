@@ -1,0 +1,13 @@
+pipeline:
+  batch:
+    size: ${BATCH_SIZE:1000}
+    delay: ${BATCH_DELAY:50}
+path:
+   queue: "${QUEUE_DIR:/var/lib/hfxeventstash/queue}"
+   logs: /dev/null
+queue:
+  type: persisted
+  page_capacity: 32mb
+  max_events: 10000
+  max_bytes: 256mb
+  drain: true

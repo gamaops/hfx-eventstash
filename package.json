@@ -1,0 +1,101 @@
+{
+  "name": "hfxeventstash",
+  "version": "0.0.0",
+  "description": "A high performance event driver to persist commands (CQRS) backed by Elasticsearch",
+  "main": "build/index.js",
+  "types": "build/types/index.d.ts",
+  "scripts": {
+    "lint": "tslint --fix -c 'tslint.json' -e './node_modules/**/*' './**/*.ts'",
+    "prebuild": "rimraf build",
+    "build": "tsc",
+    "examples:producer": "ts-node ./examples/producer.ts",
+    "start": "tsc -w",
+    "serve": "node build/index.js",
+    "coverage": "nyc npm run test",
+    "test:unit": "mocha 'specs/unit/**/*.spec.ts' -b -r 'ts-node/register' -r 'module-alias/register' -r './specs/utils/module.js'",
+    "test:tdd": "npm run test:unit -- -w --extension ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/exocet-engineering/hfx-eventstash.git"
+  },
+  "_moduleAliases": {
+    "@src": "src",
+    "@lib": "lib"
+  },
+  "files": [
+    "build/",
+    ".env.defaults",
+    "lib/"
+  ],
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [],
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "keywords": [
+    "elastic",
+    "elasticsearch",
+    "event",
+    "sourcing",
+    "cqrs",
+    "logstash",
+    "microservice",
+    "kafka",
+    "rabbitmq"
+  ],
+  "contributors": [
+    {
+      "email": "victorfranlopes@outlook.com",
+      "name": "vflopes",
+      "url": "https://github.com/vflopes"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/exocet-engineering/hfx-eventstash/issues"
+  },
+  "homepage": "https://github.com/exocet-engineering/hfx-eventstash#readme",
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^5.2.7",
+    "@types/mock-require": "^2.0.0",
+    "@types/node": "^12.6.9",
+    "@types/sinon": "^7.0.13",
+    "@types/bunyan": "^1.8.6",
+    "@types/uuid": "^3.4.5",
+    "benchmark": "^2.1.4",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0",
+    "mock-require": "^3.0.3",
+    "module-alias": "^2.2.1",
+    "nyc": "^14.1.1",
+    "rimraf": "^2.6.3",
+    "sinon": "^7.4.0",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
+    "protobufjs": "^6.8.8",
+    "typescript": "^3.5.3",
+    "change-case": "^3.1.0",
+    "bunyan": "^1.8.12",
+    "glob": "^7.1.4",
+    "axios": "^0.19.0",
+    "dotenv-defaults": "^1.0.2",
+    "uuid": "^3.3.2"
+  },
+  "dependencies": {
+    "@grpc/proto-loader": "^0.5.1",
+    "grpc": "^1.22.2"
+  }
+}

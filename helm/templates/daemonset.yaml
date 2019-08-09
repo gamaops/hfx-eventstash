@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "hfxeventstash.fullname" . }}
+  labels:
+{{ include "hfxeventstash.labels" . | indent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "hfxeventstash.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "hfxeventstash.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          livenessProbe:
+            exec:
+              command:
+                - node
+                - /usr/src/hfxeventstash/build/healthcheck.js
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            exec:
+              command:
+                - node
+                - /usr/src/hfxeventstash/build/healthcheck.js
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 2
+          env:
+            - name: SHUTDOWN_TIMEOUT
+              value: {{ .Values.shutdownTimeout | quote }}
+            - name: LOG_LEVEL
+              value: {{ .Values.logLevel | default "debug" | quote }}
+            - name: LOGSTASH_HEALTHCHECK_TIMEOUT
+              value: "1500"
+            {{- with .Values.configMaps.protos }}
+            - name: PROTOS_GLOB
+              value: "/usr/lib/hfxeventstash/protos/**/*.proto"
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: varlibhfxeventstashqueue
+              mountPath: /var/lib/hfxeventstash/queue
+              readOnly: false
+            - name: hfxeventstashpipeline
+              mountPath: /usr/src/hfxeventstash/lib/logstash.conf
+              readOnly: true  
+          {{- with .Values.configMaps.protos }}
+            - name: hfxeventstashprotos
+              mountPath: /usr/lib/hfxeventstash/protos
+              readOnly: true
+          {{- end }}
+          ports:
+            - containerPort: 42043
+              hostPort: {{ .Values.hostPort }}
+      terminationGracePeriodSeconds: {{ add (div .Values.shutdownTimeout 1000) 1 }}
+      volumes:
+        - name: varlibhfxeventstashqueue
+          hostPath:
+            path: /var/lib/hfxeventstash/queue
+        - name: hfxeventstashpipeline
+          configMap:
+            name: {{ .Values.configMaps.pipeline }}
+        {{- with .Values.configMaps.protos }}
+        - name: hfxeventstashprotos
+          configMap:
+            name: {{ .Values.configMaps.protos }}
+        {{- end }}

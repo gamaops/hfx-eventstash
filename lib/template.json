@@ -1,0 +1,33 @@
+{
+	"index_patterns": [
+		"evt-*"
+	],
+	"settings": {
+		"index": {
+			"number_of_shards": 1,
+			"number_of_replicas": 2,
+			"refresh_interval": "15s"
+		}
+	},
+	"mappings": {
+		"properties": {
+			"kind": {
+				"type": "text"
+			},
+			"format": {
+				"type": "keyword"
+			},
+			"last_updated": {
+				"type": "date"
+			},
+			"data": {
+				"type": "object",
+				"enabled": false
+			},
+			"plain": {
+				"type": "object",
+				"enabled": false
+			}
+		}
+	}
+}

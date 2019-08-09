@@ -1,0 +1,29 @@
+# Default values for hfxeventstash.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: hfxeventstash
+  tag: stable
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+hostPort: 42043
+resources:
+  limits:
+    memory: 800Mi
+    cpu: 200m
+  requests:
+    memory: 600Mi
+    cpu: 150m
+nodeSelector: {}
+tolerations: []
+configMaps:
+  pipeline: hfxeventstash-pipeline
+  protos:
+shutdownTimeout: 30000
+logLevel: debug
