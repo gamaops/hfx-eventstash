@@ -24,7 +24,7 @@ const addressbook = {
 	],
 };
 const addressbookProtobuf = AddressBook.encode(addressbook).finish();
-const call = client.eventStash.storeEvent((error: any, response: any) => {
+const call = client.eventStash.storeEvent((error, response) => {
 	console.log('Error:', error);
 	console.log('Response:', response);
 });
