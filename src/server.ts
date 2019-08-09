@@ -1,31 +1,31 @@
 require('dotenv-defaults').config();
 
 import grpc from 'grpc';
+import { getGrpcProtoDescriptor } from './load-grpc';
 import { logger } from './logger';
 import { spawnLogstash } from './logstash';
 import EventStashService from './services/eventstash';
 import HealthService from './services/health';
-import { getGrpcProtoDescriptor } from './load-grpc';
 
 const logstash = spawnLogstash();
 const protoDescriptor = getGrpcProtoDescriptor();
-const hfxV1: any = Reflect.get(protoDescriptor.hfx, 'v1');
-const grpcHealthV1: any = Reflect.get(protoDescriptor.grpc, 'health').v1;
+const { EventStash } = protoDescriptor.hfx.v1;
+const { Health } = protoDescriptor.grpc.health.v1;
 const server = new grpc.Server();
 
-server.addService(hfxV1.EventStash.service, EventStashService({
-	logstash
+server.addService(EventStash.service, EventStashService({
+	logstash,
 }));
 
-server.addService(grpcHealthV1.Health.service, HealthService());
+server.addService(Health.service, HealthService());
 
-const makeCloseListener = (signal: string) => () => {
+export const makeCloseListener = (signal: string) => () => {
 	const timeout: number = parseInt(process.env.SHUTDOWN_TIMEOUT!);
 	logger.warn({timeout}, `Received ${signal}, starting to shutdown`);
 
 	let closedServer: boolean = false;
 	let closedLogstash: boolean = false;
-	let timeoutId: any = setTimeout(() => {
+	const timeoutId: any = setTimeout(() => {
 		logger.error('Deadline reached to shutdown');
 		if (!closedServer) {
 			logger.error('Forcing server to shutdown');
@@ -38,7 +38,7 @@ const makeCloseListener = (signal: string) => () => {
 		}
 		process.exit(1);
 	}, timeout);
-	
+
 	server.tryShutdown(() => {
 		logger.warn('Server shutdown');
 		closedServer = true;

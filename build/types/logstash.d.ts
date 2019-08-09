@@ -1,2 +1,3 @@
 /// <reference types="node" />
-export declare const spawnLogstash: () => import("child_process").ChildProcessWithoutNullStreams;
+import { ChildProcess } from 'child_process';
+export declare const spawnLogstash: () => ChildProcess;

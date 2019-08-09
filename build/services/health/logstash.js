@@ -8,13 +8,16 @@ const logger_1 = require("../../logger");
 exports.isLogstashHealthy = async () => {
     const requestOptions = {
         timeout: parseInt(process.env.LOGSTASH_HEALTHCHECK_TIMEOUT || '5000'),
-        responseType: 'json'
+        responseType: 'json',
     };
     try {
         const processResponse = await axios_1.default.get('http://127.0.0.1:9600/_node/stats/process', requestOptions);
         const eventsResponse = await axios_1.default.get('http://127.0.0.1:9600/_node/stats/events', requestOptions);
         logger_1.logger.info(processResponse.data, 'Logstash process stats response');
         logger_1.logger.info(eventsResponse.data, 'Logstash events stats response');
+        if (processResponse.data.status !== 'green' && eventsResponse.data.status !== 'green') {
+            return false;
+        }
     }
     catch (error) {
         logger_1.logger.error(error, 'Logstash healthcheck error');

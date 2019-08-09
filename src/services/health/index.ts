@@ -1,5 +1,6 @@
+import { IHealthImplementation } from '../../interfaces/healthcheck';
 import check from './methods/check';
 
-export default () => ({
-	check: check()
+export default (): IHealthImplementation => ({
+	check: check(),
 });

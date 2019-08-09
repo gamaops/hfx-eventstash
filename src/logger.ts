@@ -19,5 +19,5 @@ switch (process.env.LOG_LEVEL) {
 
 export const logger = Logger.createLogger({
 	name: 'eventstash',
-	level: LOG_LEVEL
+	level: LOG_LEVEL,
 });

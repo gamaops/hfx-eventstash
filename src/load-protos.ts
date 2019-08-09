@@ -1,9 +1,9 @@
 import glob from 'glob';
 import path from 'path';
-import { loadSync } from 'protobufjs';
+import { loadSync, Root } from 'protobufjs';
 import { logger } from './logger';
 
-export const loadProtos = () => {
+export const loadProtos = (): Root => {
 
 	const PROTOS_PATH = path.isAbsolute(process.env.PROTOS_GLOB!)
 	? process.env.PROTOS_GLOB as string

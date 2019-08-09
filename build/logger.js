@@ -21,5 +21,5 @@ switch (process.env.LOG_LEVEL) {
 }
 exports.logger = bunyan_1.default.createLogger({
     name: 'eventstash',
-    level: LOG_LEVEL
+    level: LOG_LEVEL,
 });

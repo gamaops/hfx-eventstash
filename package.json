@@ -1,7 +1,7 @@
 {
   "name": "hfxeventstash",
   "version": "0.0.0",
-  "description": "A high performance event driver to persist commands (CQRS) backed by Elasticsearch",
+  "description": "A high performance event store to persist commands (CQRS) backed by Elasticsearch",
   "main": "build/index.js",
   "types": "build/types/index.d.ts",
   "scripts": {

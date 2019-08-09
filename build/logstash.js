@@ -2,16 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = require("child_process");
 const logger_1 = require("./logger");
-const logstashLogger = logger_1.logger.child({ name: 'logstash' });
+const logstashLogger = logger_1.logger.child({ process: 'logstash' });
 exports.spawnLogstash = () => {
-    const logstash = child_process_1.spawn('/usr/src/app/logstash/bin/logstash', [
+    const logstash = child_process_1.spawn('/usr/src/hfxeventstash/logstash/bin/logstash', [
         '--path.settings',
-        '/usr/src/app/lib',
-        '--config.reload.automatic'
+        '/usr/src/hfxeventstash/lib',
+        '--config.reload.automatic',
+        '-f',
+        '/usr/src/hfxeventstash/lib/logstash.conf',
     ], {
         env: {
             ...process.env,
-            LOG_FORMAT: 'json'
+            LOG_FORMAT: 'json',
         },
         detached: false,
     });
@@ -26,20 +28,10 @@ exports.spawnLogstash = () => {
         logstashLogger.warn(`Logstash exited with code: ${code}`);
     });
     logstash.stdout.on('data', (data) => {
-        try {
-            data = data.toString('utf8');
-            data = JSON.parse(data);
-        }
-        catch (error) { }
-        logstashLogger.info(data);
+        logstashLogger.info(data.toString('utf8'));
     });
     logstash.stderr.on('data', (data) => {
-        try {
-            data = data.toString('utf8');
-            data = JSON.parse(data);
-        }
-        catch (error) { }
-        logstashLogger.error(data);
+        logstashLogger.error(data.toString('utf8'));
     });
     process.on('SIGHUP', () => logstash.kill('SIGKULL'));
     return logstash;

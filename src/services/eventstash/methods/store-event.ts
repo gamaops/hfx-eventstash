@@ -1,10 +1,12 @@
-import { logger } from '../../../logger';
-import { loadProtos } from '../../../load-protos';
 import changeCase from 'change-case';
 import { ChildProcess } from 'child_process';
+import { sendUnaryData, ServerReadableStream } from 'grpc';
 import uuidv4 from 'uuid/v4';
+import { IStoreEventRequest, IStoreEventResponse } from '../../../interfaces/eventstash';
+import { loadProtos } from '../../../load-protos';
+import { logger } from '../../../logger';
 
-var protos = loadProtos();
+let protos = loadProtos();
 
 process.on('SIGHUP', () => {
 	logger.info('Received SIGHUP, reloading protos');
@@ -14,17 +16,20 @@ process.on('SIGHUP', () => {
 
 export interface IStoreEventConfig {
 	logstash: ChildProcess;
-};
+}
 
 export default ({
-	logstash
-}: IStoreEventConfig) => (call: any, callback: any) => {
+	logstash,
+}: IStoreEventConfig) => (
+	call: ServerReadableStream<IStoreEventRequest>,
+	callback: sendUnaryData<IStoreEventResponse>,
+): void => {
 	call.on('data', ({
 		kind,
 		format,
 		data,
-		id
-	}: any) => {
+		id,
+	}) => {
 		kind = kind || 'event';
 		id = id || uuidv4();
 		const index = changeCase.kebab(kind);
@@ -37,7 +42,7 @@ export default ({
 				} catch (error) {
 					doc.invalidProto = true;
 				}
-			break;
+			 break;
 			case 'JSON':
 				try {
 					doc.plain = data.toString('utf8');
@@ -46,19 +51,20 @@ export default ({
 				} catch (error) {
 					doc.invalidJson = true;
 				}
-			break;
+			 break;
 			default:
 				doc.format = doc.format || null;
 				doc.plain = data.toString('utf8');
-			break;
+			 break;
 		}
-		if (id)
+		if (id) {
 			doc.id = id;
-		logstash.stdin!.write(JSON.stringify(doc)+'\n');
+		}
+		logstash.stdin!.write(JSON.stringify(doc) + '\n');
 		logger.debug(doc);
 	}).on('end', () => {
 		callback(null, {
-			success: true
+			success: true,
 		});
 	});
 };

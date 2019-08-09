@@ -1,9 +1,9 @@
-import { spawn } from 'child_process';
+import { ChildProcess, spawn } from 'child_process';
 import { logger } from './logger';
 
 const logstashLogger = logger.child({process: 'logstash'});
 
-export const spawnLogstash = () => {
+export const spawnLogstash = (): ChildProcess => {
 	const logstash = spawn(
 		'/usr/src/hfxeventstash/logstash/bin/logstash',
 		[
@@ -11,15 +11,15 @@ export const spawnLogstash = () => {
 			'/usr/src/hfxeventstash/lib',
 			'--config.reload.automatic',
 			'-f',
-			'/usr/src/hfxeventstash/lib/logstash.conf'
+			'/usr/src/hfxeventstash/lib/logstash.conf',
 		],
 		{
 			env: {
 				...process.env,
-				LOG_FORMAT: 'json'
+				LOG_FORMAT: 'json',
 			},
 			detached: false,
-		}
+		},
 	);
 
 	logstash.on('error', (error) => {
@@ -44,4 +44,4 @@ export const spawnLogstash = () => {
 	process.on('SIGHUP', () => logstash.kill('SIGKULL'));
 
 	return logstash;
-}
+};

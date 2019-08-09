@@ -1,27 +1,27 @@
 require('dotenv-defaults').config();
 
+import uuidv4 from 'uuid/v4';
 import makeClient from '../src/client';
 import { loadProtos } from '../src/load-protos';
-import uuidv4 from 'uuid/v4';
 
 const client = makeClient({
-	uri: process.env.EVENTSTASH_RPC_URI!
+	uri: process.env.EVENTSTASH_RPC_URI!,
 });
 const protos = loadProtos();
 const AddressBook = protos.lookupType('contact.AddressBook');
 const addressbook = {
-	people:[
+	people: [
 		{
 			name: 'John Doe',
 			email: 'john.doe@foo.bar',
 			phones: [
 				{
 					number: '+55 (11) 1111-1111',
-					type: 1
-				}
-			]
-		}
-	]
+					type: 1,
+				},
+			],
+		},
+	],
 };
 const addressbookProtobuf = AddressBook.encode(addressbook).finish();
 const call = client.eventStash.storeEvent((error: any, response: any) => {
@@ -33,13 +33,13 @@ const interval = setInterval(() => {
 	call.write({
 		format: 'JSON',
 		kind: 'contact.AddressBook',
-		data: Buffer.from(JSON.stringify(addressbook))
+		data: Buffer.from(JSON.stringify(addressbook)),
 	});
 	call.write({
 		format: 'PROTOBUF',
 		kind: 'contact.AddressBook',
 		id: uuidv4(),
-		data: addressbookProtobuf
+		data: addressbookProtobuf,
 	});
 	console.log('Sent events');
 }, 4000);
