@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/exocet-engineering/hfx-eventstash.git"
+    "url": "git+https://github.com/gamaops/hfx-eventstash.git"
   },
   "_moduleAliases": {
     "@src": "src",
@@ -59,13 +59,18 @@
       "email": "victorfranlopes@outlook.com",
       "name": "vflopes",
       "url": "https://github.com/vflopes"
+    },
+    {
+      "email": "coder.marcos@gmail.com",
+      "name": "codermarcos",
+      "url": "https://github.com/codermarcos"
     }
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/exocet-engineering/hfx-eventstash/issues"
+    "url": "https://github.com/gamaops/hfx-eventstash/issues"
   },
-  "homepage": "https://github.com/exocet-engineering/hfx-eventstash#readme",
+  "homepage": "https://github.com/gamaops/hfx-eventstash#readme",
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/glob": "^7.1.1",
