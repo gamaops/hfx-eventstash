@@ -1,3 +1,12 @@
+## 2019-08-10T22:45:31.660Z
+### 💚 - fixing the CI build (project)
+
+#### none
+
+- Fix travis npm deploy rule
+
+-----------------------------
+
 ## 2019-08-10T22:18:25.087Z
 ### 👷 - adding CI build (project)
 
