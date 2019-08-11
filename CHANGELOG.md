@@ -1,3 +1,12 @@
+## 2019-08-11T21:27:50.828Z
+### 💚 - fixing the CI build (deployment)
+
+#### none
+
+- Fix travis permissions for semver.sh
+
+-----------------------------
+
 ## 2019-08-11T21:21:04.028Z
 ### 💚 - fixing the CI build (project)
 
