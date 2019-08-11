@@ -25,7 +25,9 @@ export const spawnLogstash = (): ChildProcess => {
 	logstash.on('error', (error) => {
 		logstashLogger.fatal(error);
 		process.exit(1);
-	}).on('exit', (code) => {
+	});
+
+	logstash.on('exit', (code) => {
 		if (code && code > 0) {
 			logstashLogger.fatal(`Logstash exited with code: ${code}`);
 			process.exit(1);
@@ -41,7 +43,7 @@ export const spawnLogstash = (): ChildProcess => {
 		logstashLogger.error(data.toString('utf8'));
 	});
 
-	process.on('SIGHUP', () => logstash.kill('SIGKULL'));
+	process.on('SIGHUP', () => logstash.kill('SIGHUP'));
 
 	return logstash;
 };

@@ -5,8 +5,7 @@
 * Exposes an gRPC server and exports a gRPC client to easily store events
 * You can store your events at every storage that Logstash supports
 * Supports protobuf and json encoded messages
-* Helm chart ready to deploy on Kubernetes as a DaemonSet
-* Unit and E2E tested
+* Unit tested
 
 ```bash
 npm install --save hfxeventstash
@@ -102,12 +101,14 @@ We provide an standard and recommended configurations to store events in Elastic
 
 ## Tutorial for Kubernetes server
 
+TODO
+
 ----------------------
 
 ## Tutorial for Docker server
 
 1. Setup your `logstash.conf`
-2. Start the container: `docker run --rm -it -p 42043:42043 -v /path/to/your/logstash.conf:/usr/src/hfxeventstash/lib/logstash.conf hfxeventstash:stable`
+2. Start the container: `docker run --rm -it -p 42043:42043 -v /path/to/your/logstash.conf:/usr/src/hfxeventstash/lib/logstash.conf gamaops/hfxeventstash:stable`
 3. If you want to run a healthcheck, enter in the container and execute: `node build/healthcheck.js`
 	1. After executing the healthcheck you can see the process exit code using the following command: `echo $?`
 
@@ -139,3 +140,15 @@ call.write({
 
 call.end();
 ```
+----------------------
+
+## Roadmap
+
+- [ ] Add replay feature to replay events to clients
+- [ ] Helm chart ready to deploy on Kubernetes as a DaemonSet
+
+----------------------
+
+## Related Projects
+
+* [HFXBus](https://github.com/gamaops/hfx-bus) - Redis backed high frequency exchange bus for NodeJS.

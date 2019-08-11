@@ -5,14 +5,14 @@ import { logger } from './logger';
 
 export const loadProtos = (): Root => {
 
-	const PROTOS_PATH = path.isAbsolute(process.env.PROTOS_GLOB!)
+	const protosPath = path.isAbsolute(process.env.PROTOS_GLOB!)
 	? process.env.PROTOS_GLOB as string
 	: path.join(process.cwd(), process.env.PROTOS_GLOB!);
 
-	logger.info(`Loading protos from: ${PROTOS_PATH}`);
+	logger.info(`Loading protos from: ${protosPath}`);
 
 	const protoFiles = glob.sync(
-		PROTOS_PATH,
+		protosPath,
 		{
 			nodir: true,
 			absolute: true,

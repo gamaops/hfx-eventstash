@@ -1,15 +1,30 @@
 import { expect } from 'chai';
+import sinon from 'sinon';
 
 declare const requireUncached: any;
+declare const mockUncached: any;
 
 describe(
 	'load-grpc',
 	() => {
 
+		let protoLoader: any;
 		let loadGrpc: any;
+		let grpc: any;
 
 		beforeEach(
 			() => {
+
+				protoLoader = {
+					loadSync: sinon.stub(),
+				};
+
+				grpc = {
+					loadPackageDefinition: sinon.stub(),
+				};
+
+				mockUncached('grpc', grpc);
+				mockUncached('@grpc/proto-loader', protoLoader);
 
 				loadGrpc = requireUncached('@src/load-grpc.ts');
 
@@ -20,7 +35,7 @@ describe(
 			'Should export object',
 			() => {
 				expect(loadGrpc).to.be.an('object');
-				expect(loadGrpc.setErrorKind).to.be.a('getGrpcProtoDescriptor');
+				expect(loadGrpc.getGrpcProtoDescriptor).to.be.a('function');
 			},
 		);
 
@@ -29,31 +44,24 @@ describe(
 			() => {
 
 				it(
-					'Should se a value on object',
+					'Should load proto descriptor',
 					() => {
-						
-						const object: any = {};
-						helpers.withValue(object, 'property', 'value');
-						expect(object.property).to.be.equal('value');
 
-					},
-				);
+						const packageDefinition = Symbol();
+						const protoDescriptor = Symbol();
 
-			},
-		);
+						protoLoader.loadSync.returns(packageDefinition);
+						grpc.loadPackageDefinition.returns(protoDescriptor);
 
-		describe(
-			'setErrorKind',
-			() => {
+						expect(loadGrpc.getGrpcProtoDescriptor()).to.be.equal(protoDescriptor);
 
-				it(
-					'Should set error kind',
-					() => {
-						
-						const error: any = new Error();
-						helpers.setErrorKind(error, 'MY_ERROR');
-						expect(error.code).to.be.equal('MY_ERROR');
-						expect(error.errno).to.be.equal('MY_ERROR');
+						let callArgs: any;
+
+						sinon.assert.calledOnce(protoLoader.loadSync);
+
+						sinon.assert.calledOnce(grpc.loadPackageDefinition);
+						callArgs = grpc.loadPackageDefinition.getCall(0).args;
+						expect(callArgs[0]).to.be.equal(packageDefinition);
 
 					},
 				);
