@@ -1,3 +1,12 @@
+## 2019-08-11T08:27:02.362Z
+### 💚 - fixing the CI build (deployment)
+
+#### none
+
+- Fix travis ci deploy
+
+-----------------------------
+
 ## 2019-08-10T22:48:47.648Z
 ### 💚 - fixing the CI build (project)
 
