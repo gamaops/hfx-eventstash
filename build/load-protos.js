@@ -8,11 +8,11 @@ const path_1 = __importDefault(require("path"));
 const protobufjs_1 = require("protobufjs");
 const logger_1 = require("./logger");
 exports.loadProtos = () => {
-    const PROTOS_PATH = path_1.default.isAbsolute(process.env.PROTOS_GLOB)
+    const protosPath = path_1.default.isAbsolute(process.env.PROTOS_GLOB)
         ? process.env.PROTOS_GLOB
         : path_1.default.join(process.cwd(), process.env.PROTOS_GLOB);
-    logger_1.logger.info(`Loading protos from: ${PROTOS_PATH}`);
-    const protoFiles = glob_1.default.sync(PROTOS_PATH, {
+    logger_1.logger.info(`Loading protos from: ${protosPath}`);
+    const protoFiles = glob_1.default.sync(protosPath, {
         nodir: true,
         absolute: true,
     });
