@@ -1,3 +1,12 @@
+## 2019-08-11T21:21:04.028Z
+### 💚 - fixing the CI build (project)
+
+#### none
+
+- Testing travis slack notifications
+
+-----------------------------
+
 ## 2019-08-11T21:15:54.579Z
 ### 👷 - adding CI build (project)
 
