@@ -1,3 +1,12 @@
+## 2019-08-11T21:15:54.579Z
+### 👷 - adding CI build (project)
+
+#### none
+
+- Add travis scripts and slack notifications
+
+-----------------------------
+
 ## 2019-08-11T08:27:02.362Z
 ### 💚 - fixing the CI build (deployment)
 
