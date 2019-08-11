@@ -1,6 +1,6 @@
 {
   "name": "hfxeventstash",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A high performance event store to persist commands (CQRS)",
   "main": "build/index.js",
   "types": "build/types/index.d.ts",
